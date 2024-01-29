@@ -1,4 +1,4 @@
-package com.templateServer.demi.dto;
+package com.templateServer.demi.dto.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

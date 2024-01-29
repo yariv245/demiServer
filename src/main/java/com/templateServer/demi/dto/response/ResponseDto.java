@@ -1,4 +1,4 @@
-package com.templateServer.demi.dto;
+package com.templateServer.demi.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.templateServer.demi.service.Impl;
 
 import com.templateServer.demi.constant.AccountsConstants;
-import com.templateServer.demi.dto.AccountDto;
-import com.templateServer.demi.dto.CustomerDto;
+import com.templateServer.demi.dto.request.AccountRequest;
+import com.templateServer.demi.dto.request.CustomerRequest;
 import com.templateServer.demi.entity.Account;
 import com.templateServer.demi.entity.Customer;
 import com.templateServer.demi.exception.CustomerAlreadyExistsException;
@@ -25,23 +25,23 @@ public class AccountServiceImpl implements AccountService {
     private final ModelMapper modelMapper;
 
     @Override
-    public CustomerDto createAccount(CustomerDto customerDto) {
-        Optional<Customer> customerByPhoneNumber = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
+    public CustomerRequest createAccount(CustomerRequest customerRequest) {
+        Optional<Customer> customerByPhoneNumber = customerRepository.findByMobileNumber(customerRequest.getMobileNumber());
 
         if (customerByPhoneNumber.isPresent()) {
-            throw new CustomerAlreadyExistsException("This customer already exists " + customerDto.getMobileNumber());
+            throw new CustomerAlreadyExistsException("This customer already exists " + customerRequest.getMobileNumber());
         }
 
-        Customer customer = mapToCustomer(customerDto);
+        Customer customer = mapToCustomer(customerRequest);
         Customer savedCustomer = customerRepository.save(customer);
         Account account = mapToAccount(savedCustomer);
         accountRepository.save(account);
 
-        return modelMapper.map(customer, CustomerDto.class);
+        return modelMapper.map(customer, CustomerRequest.class);
     }
 
     @Override
-    public CustomerDto fetchCustomerDetails(String mobileNumber) {
+    public CustomerRequest fetchCustomerDetails(String mobileNumber) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
 
@@ -52,11 +52,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean updateAccount(CustomerDto request) {
-        AccountDto accountDto = request.getAccountDto();
-        Account account = accountRepository.findById(accountDto.getAccountNumber())
-                .orElseThrow(() -> new ResourceNotFoundException("Account", "account number", accountDto.getAccountNumber().toString()));
-        modelMapper.map(accountDto, account);
+    public boolean updateAccount(CustomerRequest request) {
+        AccountRequest accountRequest = request.getAccountRequest();
+        Account account = accountRepository.findById(accountRequest.getAccountNumber())
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "account number", accountRequest.getAccountNumber().toString()));
+        modelMapper.map(accountRequest, account);
         accountRepository.save(account);
 
         Customer customer = customerRepository.findById(account.getCustomerId())
@@ -78,16 +78,16 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
-    private CustomerDto mapToCustomerDto(Customer customer, Account account) {
-        CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
-        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
-        customerDto.setAccountDto(accountDto);
+    private CustomerRequest mapToCustomerDto(Customer customer, Account account) {
+        CustomerRequest customerRequest = modelMapper.map(customer, CustomerRequest.class);
+        AccountRequest accountRequest = modelMapper.map(account, AccountRequest.class);
+        customerRequest.setAccountRequest(accountRequest);
 
-        return customerDto;
+        return customerRequest;
     }
 
-    private Customer mapToCustomer(CustomerDto customerDto) {
-        Customer customer = modelMapper.map(customerDto, Customer.class);
+    private Customer mapToCustomer(CustomerRequest customerRequest) {
+        Customer customer = modelMapper.map(customerRequest, Customer.class);
         customer.setCreatedAt(LocalDateTime.now());
         customer.setCreatedBy("Spring");
 

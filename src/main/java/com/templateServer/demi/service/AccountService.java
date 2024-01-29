@@ -1,30 +1,30 @@
 package com.templateServer.demi.service;
 
 
-import com.templateServer.demi.dto.CustomerDto;
+import com.templateServer.demi.dto.request.CustomerRequest;
 
 public interface AccountService {
 
     /**
      *  method for creating new account
-     * @param customerDto  customer details
+     * @param customerRequest  customer details
      * @return saved customer details
      */
-    CustomerDto createAccount(CustomerDto customerDto);
+    CustomerRequest createAccount(CustomerRequest customerRequest);
 
     /**
      *  method for fetch account details
      * @param mobileNumber customer mobile number
      * @return customer details
      */
-    CustomerDto fetchCustomerDetails(String mobileNumber);
+    CustomerRequest fetchCustomerDetails(String mobileNumber);
 
     /**
      *  method for updating account
-     * @param customerDto customer details
+     * @param customerRequest customer details
      * @return boolean succeed
      */
-    boolean updateAccount(CustomerDto customerDto);
+    boolean updateAccount(CustomerRequest customerRequest);
 
     /**
      *  deleting account
