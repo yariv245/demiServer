@@ -33,4 +33,13 @@ public class AccountController {
                 .ok()
                 .body(response);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Boolean> updateAccount(@RequestBody CustomerDto request) {
+        boolean response = accountService.updateAccount(request);
+
+        return ResponseEntity
+                .ok()
+                .body(response);
+    }
 }

@@ -18,4 +18,11 @@ public interface AccountService {
      * @return customer details
      */
     CustomerDto fetchCustomerDetails(String mobileNumber);
+
+    /**
+     *  method for creating new account
+     * @param customerDto
+     * @return boolean succeed
+     */
+    boolean updateAccount(CustomerDto customerDto);
 }
