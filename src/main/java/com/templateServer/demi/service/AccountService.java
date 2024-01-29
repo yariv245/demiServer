@@ -7,8 +7,15 @@ public interface AccountService {
 
     /**
      *  method for creating new account
-     * @param customerDto customer
-     * @return account details
+     * @param customerDto
+     * @return saved customer details
      */
     CustomerDto createAccount(CustomerDto customerDto);
+
+    /**
+     *  method for creating new account
+     * @param mobileNumber
+     * @return customer details
+     */
+    CustomerDto fetchCustomerDetails(String mobileNumber);
 }

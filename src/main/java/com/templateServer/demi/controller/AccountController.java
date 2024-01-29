@@ -6,10 +6,7 @@ import com.templateServer.demi.dto.ResponseDto;
 import com.templateServer.demi.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -26,5 +23,14 @@ public class AccountController {
         return ResponseEntity
                 .created(URI.create(customer.getName()))
                 .body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
+    }
+
+    @GetMapping("/fetch")
+    public ResponseEntity<CustomerDto> fetchCustomerDetails(@RequestParam String mobileNumber) {
+        CustomerDto response = accountService.fetchCustomerDetails(mobileNumber);
+
+        return ResponseEntity
+                .ok()
+                .body(response);
     }
 }

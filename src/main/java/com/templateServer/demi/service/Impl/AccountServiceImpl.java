@@ -6,6 +6,7 @@ import com.templateServer.demi.dto.CustomerDto;
 import com.templateServer.demi.entity.Account;
 import com.templateServer.demi.entity.Customer;
 import com.templateServer.demi.exception.CustomerAlreadyExistsException;
+import com.templateServer.demi.exception.ResourceNotFoundException;
 import com.templateServer.demi.repository.AccountRepository;
 import com.templateServer.demi.repository.CustomerRepository;
 import com.templateServer.demi.service.AccountService;
@@ -37,6 +38,25 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
 
         return modelMapper.map(customer, CustomerDto.class);
+    }
+
+    @Override
+    public CustomerDto fetchCustomerDetails(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+
+        Account account = accountRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Account", "customer id", customer.getCustomerId().toString()));
+
+        return mapToCustomerDto(customer, account);
+    }
+
+    private CustomerDto mapToCustomerDto(Customer customer, Account account) {
+        CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
+        AccountDto accountDto = modelMapper.map(account, AccountDto.class);
+        customerDto.setAccountDto(accountDto);
+
+        return customerDto;
     }
 
     private Customer mapToCustomer(CustomerDto customerDto) {
