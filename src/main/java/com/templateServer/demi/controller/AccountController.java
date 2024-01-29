@@ -42,4 +42,13 @@ public class AccountController {
                 .ok()
                 .body(response);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Boolean> deleteAccount(@RequestParam String mobileNumber) {
+        boolean response = accountService.deleteAccount(mobileNumber);
+
+        return ResponseEntity
+                .ok()
+                .body(response);
+    }
 }

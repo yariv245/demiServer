@@ -67,6 +67,17 @@ public class AccountServiceImpl implements AccountService {
         return true;
     }
 
+    @Override
+    public boolean deleteAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+
+        accountRepository.deleteAccountByCustomerId(customer.getCustomerId());
+        customerRepository.delete(customer);
+
+        return true;
+    }
+
     private CustomerDto mapToCustomerDto(Customer customer, Account account) {
         CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
         AccountDto accountDto = modelMapper.map(account, AccountDto.class);
