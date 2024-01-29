@@ -87,19 +87,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private Customer mapToCustomer(CustomerRequest customerRequest) {
-        Customer customer = modelMapper.map(customerRequest, Customer.class);
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("Spring");
 
-        return customer;
+        return modelMapper.map(customerRequest, Customer.class);
     }
 
     private Account mapToAccount(Customer customer) {
         Account account = modelMapper.map(customer, Account.class);
         account.setAccountType(AccountsConstants.SAVINGS);
         account.setBranchAddress(AccountsConstants.ADDRESS);
-        account.setCreatedAt(LocalDateTime.now());
-        account.setCreatedBy("Spring");
 
         return account;
     }
